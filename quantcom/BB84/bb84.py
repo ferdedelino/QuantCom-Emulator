@@ -36,17 +36,17 @@ def one_round():
 
 
 total = 0
-eve_detected = 0
+eve_undetected = 0
 eve_correct = 0
-for i in range(100000):
+for i in range(10000):
     a, b, r, t, s = one_round()
     if a != b:
         continue
     total += 1
-    if r != s:
-        eve_detected += 1
+    if r == s:
+        eve_undetected += 1
     if t == r:
         eve_correct += 1
 
-print(f"Eve detected chance: {eve_detected / total}")
+print(f"Eve undetected chance: {eve_undetected / total}")
 print(f"Eve correct: {eve_correct / total}")
