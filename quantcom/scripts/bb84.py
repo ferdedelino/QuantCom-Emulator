@@ -2,6 +2,7 @@ import random
 
 from quantcom import gates
 from quantcom.circuit import Circuit
+from quantcom.gates import Gate
 from quantcom.qubit import Qubit
 
 
@@ -12,15 +13,15 @@ def one_round():
     r_state = Qubit.zero() if r == 0 else Qubit.one()
     circuit = Circuit(1)
     if a == 0:
-        circuit.add_gate(gates.IDENTITY)
+        circuit.add_gate(Gate.IDENTITY)
     else:
-        circuit.add_gate(gates.HADAMARD)
+        circuit.add_gate(Gate.HADAMARD)
 
     # Eves attack
-    v = random.choice([gates.IDENTITY, gates.HADAMARD])
-    v_prime = random.choice([gates.IDENTITY, gates.HADAMARD])
+    v = random.choice([Gate.IDENTITY, Gate.HADAMARD])
+    v_prime = random.choice([Gate.IDENTITY, Gate.HADAMARD])
     circuit.add_gate(v)
-    t = circuit.readout(r_state, 1)[0]
+    t = circuit.readout_one(r_state)
     t_state = Qubit.zero() if t == 0 else Qubit.one()
     circuit = Circuit(1)  # Reset circuit - old gates are no longer relevant after readout
     circuit.add_gate(v_prime)
@@ -28,10 +29,10 @@ def one_round():
     # Bob reads
     b = random.choice([0, 1])
     if b == 0:
-        circuit.add_gate(gates.IDENTITY)
+        circuit.add_gate(Gate.IDENTITY)
     else:
-        circuit.add_gate(gates.HADAMARD)
-    s = circuit.readout(t_state, 1)[0]
+        circuit.add_gate(Gate.HADAMARD)
+    s = circuit.readout_one(t_state)
     return a, b, r, t, s
 
 

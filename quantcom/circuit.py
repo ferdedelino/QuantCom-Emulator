@@ -1,7 +1,7 @@
 import numpy as np
 
+from quantcom.gates import Gate
 from quantcom.qubit import Qubit
-from quantcom import gates
 
 
 class Circuit:
@@ -18,7 +18,7 @@ class Circuit:
 
     def apply_gates(self, qubit: Qubit) -> Qubit:
         # todo: more than one qubit (not done in the lecture yet)
-        mat = gates.IDENTITY
+        mat = Gate.IDENTITY
         for gate in self.gates:
             mat = np.matmul(mat, gate)
         state = np.matmul(mat, qubit.state)
@@ -28,3 +28,6 @@ class Circuit:
         final_state = self.apply_gates(qubit)
         probabilities = np.abs(final_state.state) ** 2
         return np.random.choice([0, 1], p=probabilities, size=n).tolist()
+
+    def readout_one(self, qubit: Qubit) -> int:
+        return self.readout(qubit, 1)[0]
